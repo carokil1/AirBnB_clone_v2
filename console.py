@@ -118,22 +118,21 @@ class HBNBCommand(cmd.Cmd):
         try:
             if not args:
                 raise SyntaxError()
-            my_list = args.split(" ")
+            arg_list = args.split(" ")
             kw = {}
-            for arg in my_list[1:]:
-                arg_splitted = arg.split("=")
-                arg_splitted[1] = eval (arg_splitted[1])
-                if type(arg_splitted[1]) is str:
-                    arg_splitted[1] = arg_splitted[1].replace("_", " ").replace('"', '\\"')
-                    kw[arg_splitted[0]] = arg_splitted[1]
+            for arg in arg_list[1:]:
+                arg_splited = arg.split("=")
+                arg_splited[1] = eval(arg_splited[1])
+                if type(arg_splited[1]) is str:
+                    arg_splited[1] = arg_splited[1].replace("_", " ").replace('"', '\\"')
+                kw[arg_splited[0]] = arg_splited[1]
         except SyntaxError:
             print("** class name missing **")
         except NameError:
             print("** class doesn't exist **")
-        new_instance = HBNBCommand.classes[my_list[0]](**kw)
+        new_instance = HBNBCommand.classes[arg_list[0]](**kw)
         new_instance.save()
         print(new_instance.id)
-        
 
     def help_create(self):
         """ Help information for the create method """
@@ -215,13 +214,11 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
-        else:
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all(HBNBCommand.classes[args]).items():
                 print_list.append(str(v))
-
+        else:
+            for k, v in storage.all().items():
+                print_list.append(str(v))
         print(print_list)
 
     def help_all(self):
