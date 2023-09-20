@@ -124,8 +124,7 @@ class HBNBCommand(cmd.Cmd):
                 arg_splitted = arg.split("=")
                 arg_splitted[1] = eval (arg_splitted[1])
                 if type(arg_splitted[1]) is str:
-                    arg_splitted[1] = arg_splitted[1].replace("_", " ").
-                    replace('"', '\\"')
+                    arg_splitted[1] = arg_splitted[1].replace("_", " ").replace('"', '\\"')
                     kw[arg_splitted[0]] = arg_splitted[1]
         except SyntaxError:
             print("** class name missing **")
@@ -134,6 +133,7 @@ class HBNBCommand(cmd.Cmd):
         new_instance = HBNBCommand.classes[my_list[0]](**kw)
         new_instance.save()
         print(new_instance.id)
+        
 
     def help_create(self):
         """ Help information for the create method """
@@ -328,7 +328,6 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
-
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
